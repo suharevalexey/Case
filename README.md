@@ -24,6 +24,7 @@ $$D_A = \{(x_i, y_i^A)\}_{i=1}^{N_A}, \quad D_B = \{(x_j, y_j^B)\}_{j=1}^{N_B}, 
 most_uv_molecular_design/
 ├── data/
 │   ├── raw/                  # Реальные сырые данные: M01 (photoswitches.csv), M11 (deep4chem.csv)
+│   │   └── references/       # Справочные внешние базы (NICEATM ADME, skin sens, UV-Vis spectra)
 │   └── processed/            # Канонизированные сплиты Train / Val / Test для D_A и D_B
 ├── models/                   # 8 обученных Evaluators, 2 независимых оракула, AD-база
 ├── results/

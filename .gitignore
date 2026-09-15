@@ -18,10 +18,7 @@ venv/
 .idea/
 *.swp
 
-# Temporary scratch and large raw cache files
-batch1.json
-batch2.json
-*.xlsx
-deep4chem_sample.csv
-uvvis_train.csv
+# Large raw datasets and reference data
 data/raw/deep4chem.csv
+data/raw/references/
+*.xlsx
