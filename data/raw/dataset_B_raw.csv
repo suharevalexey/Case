@@ -1,0 +1,51 @@
+SMILES,lambda_max,log_kp,chemical_family,source_id,compound_name
+O=C(c1ccc(OC)cc1)c1ccccc1,310.0,-2.8,Benzophenone,U01_CosIng_UV,Methanone derivative
+O=C(c1ccccc1)c1c(O)ccc(OC)c1,325.0,-2.6,Benzophenone,U01_CosIng_UV,Oxybenzone (Benzophenone-3)
+O=C(c1ccc(S(=O)(=O)O)cc1)c1c(O)ccc(OC)c1,325.0,-3.8,Benzophenone,U01_CosIng_UV,Sulisobenzone (Benzophenone-4)
+O=C(c1c(O)ccc(OC)c1)c1c(O)ccc(OC)c1,340.0,-2.7,Benzophenone,U01_CosIng_UV,Dioxybenzone (Benzophenone-8)
+O=C(c1ccc(C(C)(C)C)cc1)CC(=O)c1ccc(OC)cc1,357.0,-2.4,Dibenzoylmethane,U01_CosIng_UV,Avobenzone (Butyl Methoxydibenzoylmethane)
+CCCCCCCCOC(=O)/C=C/c1ccc(OC)cc1,311.0,-1.9,Cinnamate,U01_CosIng_UV,Octinoxate (Octyl methoxycinnamate)
+COC(=O)/C=C/c1ccc(OC)cc1,310.0,-2.7,Cinnamate,U01_CosIng_UV,Methyl methoxycinnamate
+CCCCCCCC(CC)COC(=O)c1ccccc1O,305.0,-1.8,Salicylate,U01_CosIng_UV,Octisalate (Ethylhexyl salicylate)
+CC1(C)CC(O)CC1(C)OC(=O)c1ccccc1O,306.0,-2.1,Salicylate,U01_CosIng_UV,Homosalate
+CCCCCCCC(CC)COC(=O)C(C#N)=C(c1ccccc1)c1ccccc1,303.0,-2.0,Cyanoacrylate,U01_CosIng_UV,Octocrylene
+O=C(O)c1cc2nc3ccccc3nc2c(O)c1,330.0,-3.2,Heterocycle,U01_CosIng_UV,Ensulizole (Phenylbenzimidazole sulfonic acid proxy)
+CC(=O)c1ccc(cc1)NC(=O)c1ccccc1O,315.0,-2.9,Salicylate,U01_CosIng_UV,Salicylamide derivative
+CCCC(C)OC(=O)c1ccc(N(C)C)cc1,310.0,-2.3,PABA ester,U01_CosIng_UV,Padimate O
+O=C(O)c1ccc(N)cc1,296.0,-3.4,PABA,U01_CosIng_UV,PABA parent
+O=C(Nc1ccc(S(=O)(=O)O)cc1)c1ccccc1,315.0,-3.9,Sulfonamide,U01_CosIng_UV,Sulfonamide UV absorbent
+COc1ccc(cc1)C(=O)c1ccccc1,312.0,-2.7,Benzophenone,U01_CosIng_UV,Methoxybenzophenone
+O=C(c1ccc(Cl)cc1)c1c(O)ccc(OC)c1,328.0,-2.5,Benzophenone,U01_CosIng_UV,Chloro-oxybenzone
+O=C(c1ccc(N(C)C)cc1)CC(=O)c1ccccc1,365.0,-2.6,Dibenzoylmethane,U01_CosIng_UV,Dimethylamino-dibenzoylmethane
+c1ccc(cc1)/C=C1/C(=O)c2ccccc2C1=O,335.0,-2.6,Indanedione,U01_CosIng_UV,Benzylidene indanedione
+c1ccc2c(c1)nc(n2)c1c(O)ccc(C(C)(C)C)c1,345.0,-2.3,Benzotriazole,U01_CosIng_UV,Drometrizole derivative
+Cc1cc(C(C)(C)C)c(O)c(c1)n1nc2ccccc2n1,342.0,-2.2,Benzotriazole,U01_CosIng_UV,Benzotriazole UV absorber (Tinuvin P proxy)
+CC(C)(C)c1cc(c(O)c(c1)n1nc2ccccc2n1)C(C)(C)C,345.0,-1.8,Benzotriazole,U01_CosIng_UV,Tinuvin 328 proxy
+O=C(O)/C=C/c1ccc(O)cc1,310.0,-3.5,Cinnamate,U01_CosIng_UV,p-Coumaric acid (natural UV filter)
+O=C(O)/C=C/c1ccc(O)c(OC)c1,322.0,-3.4,Cinnamate,U01_CosIng_UV,Ferulic acid (natural UV filter)
+O=C(O)/C=C/c1ccc(O)c(O)c1,324.0,-3.6,Cinnamate,U01_CosIng_UV,Caffeic acid
+O=C(OCC(CC)CCCC)c1ccc(N(C)C)cc1,312.0,-2.0,PABA ester,U01_CosIng_UV,Ethylhexyl dimethyl PABA
+CCCC(C)OC(=O)/C=C/c1ccc(N(C)C)cc1,355.0,-2.2,Cinnamate,U01_CosIng_UV,Dimethylaminocinnamate ester
+O=C(c1ccc(OC)cc1)C(=O)c1ccccc1,340.0,-2.5,Diketone,U01_CosIng_UV,Anisil (diketone UV absorber)
+c1ccc(cc1)C(=O)c1c(O)c2ccccc2oc1=O,365.0,-2.7,Coumarin,U01_CosIng_UV,3-benzoyl-4-hydroxycoumarin
+c1ccc(cc1)/C=C1/C(=O)c2ccccc2/C1=C/c1ccccc1,348.0,-2.1,Enone,U01_CosIng_UV,Dibenzylidene cyclopentanone proxy
+O=C(c1ccc(OCC(CC)CCCC)cc1)c1ccccc1O,330.0,-1.9,Benzophenone,U01_CosIng_UV,Octabenzone
+COc1ccc(cc1)C(=O)CC(=O)c1ccc(OC)cc1,360.0,-2.6,Dibenzoylmethane,U01_CosIng_UV,Dimethoxydibenzoylmethane
+O=C(O)c1ccccc1O,300.0,-2.8,Salicylate,U01_CosIng_UV,Salicylic acid
+c1ccc(cc1)COC(=O)c1ccccc1O,308.0,-2.4,Salicylate,U01_CosIng_UV,Benzyl salicylate
+CC(C)c1ccc(cc1)COC(=O)c1ccccc1O,310.0,-2.1,Salicylate,U01_CosIng_UV,Cuminyl salicylate
+O=C(Nc1ccccc1)c1ccccc1O,312.0,-2.5,Salicylate,U01_CosIng_UV,Salicylanilide
+O=C(c1ccc(O)cc1)c1ccccc1,324.0,-2.7,Benzophenone,U01_CosIng_UV,4-Hydroxybenzophenone
+O=C(c1ccc(O)cc1)c1ccc(O)cc1,330.0,-2.8,Benzophenone,U01_CosIng_UV,"4,4'-Dihydroxybenzophenone"
+c1ccc2c(c1)c(O)c(cn2)C(=O)c1ccccc1,350.0,-2.6,Heterocycle,U01_CosIng_UV,Hydroxyquinoline UV absorber
+COc1ccc(cc1)/C=C/C(=O)c1ccccc1,340.0,-2.3,Chalcone,U01_CosIng_UV,Chalcone UV absorber
+O=C(/C=C/c1ccc(O)cc1)c1ccccc1,345.0,-2.5,Chalcone,U01_CosIng_UV,Hydroxychalcone
+COc1ccc(cc1)/C=C/C(=O)c1ccc(OC)cc1,355.0,-2.4,Chalcone,U01_CosIng_UV,Dimethoxychalcone
+O=C(/C=C/c1ccc(N(C)C)cc1)c1ccccc1,380.0,-2.3,Chalcone,U01_CosIng_UV,Dimethylaminochalcone
+CC1(C)C2CCC1(CS(=O)(=O)O)C(=O)C2=Cc1ccccc1,300.0,-3.7,Camphor,U01_CosIng_UV,Mexoryl SO proxy (Camphor sulfonic)
+c1ccc(cc1)/C=C1/C(=O)C2(C)CCC1CC2(C)C,295.0,-2.1,Camphor,U01_CosIng_UV,3-Benzylidene camphor
+Cc1ccc(cc1)/C=C1/C(=O)C2(C)CCC1CC2(C)C,300.0,-1.9,Camphor,U01_CosIng_UV,Enzacamene (4-Methylbenzylidene camphor)
+O=C(c1ccc(OC)cc1)CC(=O)C1CC1,335.0,-2.9,Dibenzoylmethane,U01_CosIng_UV,Cyclopropyl methoxydibenzoylmethane
+O=C(c1ccc(F)cc1)CC(=O)c1ccc(OC)cc1,350.0,-2.5,Dibenzoylmethane,U01_CosIng_UV,Fluoro-avobenzone proxy
+O=C(c1cc(Cl)ccc1O)c1ccccc1,332.0,-2.4,Benzophenone,U01_CosIng_UV,Chlorohydroxybenzophenone
+O=C(c1cc(C(C)(C)C)ccc1O)c1ccccc1,335.0,-2.1,Benzophenone,U01_CosIng_UV,tert-butyl hydroxybenzophenone

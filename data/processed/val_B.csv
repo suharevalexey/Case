@@ -1,0 +1,4 @@
+SMILES,lambda_max,log_kp,chemical_family,source_id,compound_name,canonical_smiles
+c1ccc(cc1)COC(=O)c1ccccc1O,308.0,-2.4,Salicylate,U01_CosIng_UV,Benzyl salicylate,O=C(OCc1ccccc1)c1ccccc1O
+CC(C)c1ccc(cc1)COC(=O)c1ccccc1O,310.0,-2.1,Salicylate,U01_CosIng_UV,Cuminyl salicylate,CC(C)c1ccc(COC(=O)c2ccccc2O)cc1
+c1ccc(cc1)C(=O)c1c(O)c2ccccc2oc1=O,365.0,-2.7,Coumarin,U01_CosIng_UV,3-benzoyl-4-hydroxycoumarin,O=C(c1ccccc1)c1c(O)c2ccccc2oc1=O

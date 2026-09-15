@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Models and large binaries
+# Models and large binaries (reproducible via run_day1.py)
 *.joblib
 models/*.joblib
 

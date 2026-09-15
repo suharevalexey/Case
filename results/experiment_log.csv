@@ -1,0 +1,2 @@
+timestamp,strategy,n_generated,validity,uniqueness,novelty,diversity,mean_sa_score,joint_success_rate,mean_pred_A_wl,mean_pred_A_dh,mean_pred_B_wl,mean_pred_B_logkp,mean_dist_to_DA,mean_dist_to_DB,mean_uncertainty_AD,execution_time_sec
+2026-09-15 13:43:53,B0_baseline,1000,1.0,1.0,0.994,0.8687212019412043,5.203130282197712,0.014,368.14496999999994,75.2571,322.20789,-2.4426799999999997,0.7099500000000001,0.7899390000000001,0.749945,13.51
