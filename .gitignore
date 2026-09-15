@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Models and large binaries
+*.joblib
+models/*.joblib
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
