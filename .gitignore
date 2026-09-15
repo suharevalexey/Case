@@ -17,3 +17,11 @@ venv/
 .vscode/
 .idea/
 *.swp
+
+# Temporary scratch and large raw cache files
+batch1.json
+batch2.json
+*.xlsx
+deep4chem_sample.csv
+uvvis_train.csv
+data/raw/deep4chem.csv

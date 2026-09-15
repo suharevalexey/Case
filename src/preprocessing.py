@@ -65,59 +65,39 @@ def scaffold_split(
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Split dataset into train, val, test based on Bemis-Murcko scaffolds.
-    Prevents data leakage across structurally similar scaffolds.
+    Sorts scaffolds by size descending to pack the largest core scaffolds into Train,
+    ensuring balanced representation in Val (~10%) and Test (~10%).
     """
     scaffold_to_indices = defaultdict(list)
     for idx, row in df.iterrows():
         scaff = generate_scaffold(row["canonical_smiles"])
         scaffold_to_indices[scaff].append(idx)
         
-    # Sort scaffolds by size descending for balanced grouping
-    scaffold_sets = list(scaffold_to_indices.values())
-    np.random.seed(seed)
-    np.random.shuffle(scaffold_sets)
+    # Sort scaffolds by size descending
+    sorted_scaffolds = sorted(scaffold_to_indices.items(), key=lambda x: len(x[1]), reverse=True)
     
     total_len = len(df)
-    train_cutoff = ratios["train"] * total_len
-    val_cutoff = (ratios["train"] + ratios["val"]) * total_len
+    target_train = int(ratios["train"] * total_len)
+    target_val = int(ratios["val"] * total_len)
     
     train_idx, val_idx, test_idx = [], [], []
     
-    for group in scaffold_sets:
-        if len(train_idx) + len(group) <= train_cutoff:
+    for scaff, group in sorted_scaffolds:
+        if len(train_idx) + len(group) <= target_train or (len(train_idx) == 0):
             train_idx.extend(group)
-        elif len(train_idx) + len(val_idx) + len(group) <= val_cutoff:
+        elif len(val_idx) + len(group) <= target_val or (len(val_idx) == 0):
             val_idx.extend(group)
         else:
             test_idx.extend(group)
             
-    # Guarantee at least some entries in each if sample is small
-    if not val_idx and len(test_idx) > 1:
-        val_idx.append(test_idx.pop())
-    if not test_idx and len(val_idx) > 1:
-        test_idx.append(val_idx.pop())
+    # Guarantee at least some entries in test
+    if len(test_idx) == 0 and len(val_idx) > 2:
+        test_idx = val_idx[len(val_idx)//2:]
+        val_idx = val_idx[:len(val_idx)//2]
         
     train_df = df.iloc[train_idx].copy().reset_index(drop=True)
     val_df = df.iloc[val_idx].copy().reset_index(drop=True)
     test_df = df.iloc[test_idx].copy().reset_index(drop=True)
-    
-    return train_df, val_df, test_df
-
-def random_split(
-    df: pd.DataFrame,
-    ratios: Dict[str, float] = TRAIN_SPLIT_RATIOS,
-    seed: int = RANDOM_SEED
-) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Random split baseline (used for Day 4 ablation comparison)."""
-    np.random.seed(seed)
-    shuffled = df.sample(frac=1.0, random_state=seed).reset_index(drop=True)
-    n = len(df)
-    n_train = int(ratios["train"] * n)
-    n_val = int(ratios["val"] * n)
-    
-    train_df = shuffled.iloc[:n_train].copy().reset_index(drop=True)
-    val_df = shuffled.iloc[n_train:n_train+n_val].copy().reset_index(drop=True)
-    test_df = shuffled.iloc[n_train+n_val:].copy().reset_index(drop=True)
     
     return train_df, val_df, test_df
 

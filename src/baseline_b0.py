@@ -4,7 +4,6 @@ import pandas as pd
 from pathlib import Path
 from typing import List, Set
 from rdkit import Chem
-from rdkit.Chem import AllChem, rdChemReactions
 from rdkit import RDLogger
 
 RDLogger.DisableLog('rdApp.*')
@@ -56,7 +55,6 @@ def mutate_molecule(smiles: str, rng: random.Random) -> str:
     
     try:
         if mutation_type == "add_substituent":
-            # Pick a hydrogen-bearing heavy atom to substitute
             candidate_atoms = [a.GetIdx() for a in rwmol.GetAtoms() if a.GetTotalNumHs() > 0]
             if candidate_atoms:
                 target_idx = rng.choice(candidate_atoms)
@@ -64,10 +62,8 @@ def mutate_molecule(smiles: str, rng: random.Random) -> str:
                 if sub_smi != "[H]":
                     sub_mol = Chem.MolFromSmiles(sub_smi)
                     if sub_mol is not None:
-                        # Combine molecules
                         combo = Chem.CombineMols(rwmol, sub_mol)
                         rwcombo = Chem.RWMol(combo)
-                        # Attach first atom of substituent to target atom
                         sub_start_idx = rwmol.GetNumAtoms()
                         rwcombo.AddBond(target_idx, sub_start_idx, Chem.BondType.SINGLE)
                         mut_mol = rwcombo.GetMol()
@@ -76,18 +72,16 @@ def mutate_molecule(smiles: str, rng: random.Random) -> str:
                             return can
                             
         elif mutation_type == "substitute_atom":
-            # Pick a carbon atom to substitute with heteroatom (N, O, S)
             c_atoms = [a.GetIdx() for a in rwmol.GetAtoms() if a.GetAtomicNum() == 6 and a.GetDegree() <= 2]
             if c_atoms:
                 idx = rng.choice(c_atoms)
-                new_elem = rng.choice([7, 8, 16]) # N, O, S
+                new_elem = rng.choice([7, 8, 16])
                 rwmol.GetAtomWithIdx(idx).SetAtomicNum(new_elem)
                 can = canonicalize_smiles(Chem.MolToSmiles(rwmol.GetMol()))
                 if can is not None:
                     return can
                     
         elif mutation_type == "recombine":
-            # Pick two seeds and connect them via single bond
             other_seed = rng.choice(SEED_SCAFFOLDS)
             mol2 = Chem.MolFromSmiles(other_seed)
             if mol2 is not None:
@@ -132,7 +126,6 @@ class BaselineGeneratorB0:
             can = canonicalize_smiles(mutated)
             
             if can is not None and can not in unique_generated:
-                # Basic heavy atom filter (8 to 50 heavy atoms)
                 mol = Chem.MolFromSmiles(can)
                 if mol is not None and 7 <= mol.GetNumHeavyAtoms() <= 50:
                     unique_generated.add(can)
@@ -147,7 +140,7 @@ class BaselineGeneratorB0:
         return result
 
 def run_baseline_b0_pipeline(evaluator_suite: PropertyEvaluatorSuite) -> pd.DataFrame:
-    """Run baseline B0 generation, property evaluation, and save generated_b0.csv."""
+    """Run baseline B0 generation, evaluate 8 criteria + AD, and save generated_b0.csv."""
     b0 = BaselineGeneratorB0(seed=RANDOM_SEED)
     gen_smiles = b0.generate(BASELINE_GEN_COUNT)
     
@@ -162,32 +155,40 @@ def run_baseline_b0_pipeline(evaluator_suite: PropertyEvaluatorSuite) -> pd.Data
     for k, v in metrics.items():
         print(f"  {k}: {v:.4f}" if isinstance(v, float) else f"  {k}: {v}")
         
-    # Evaluate candidates with EvaluatorSuite
-    print("\nEvaluating candidate properties using Evaluator Suite...")
+    # Evaluate candidates with 8-criteria EvaluatorSuite
+    print("\nEvaluating candidates across 4 MOST + 4 UV/Skin criteria...")
     df_eval = evaluator_suite.evaluate_candidates(gen_smiles)
     
     # Add method ID and novelty column
     df_eval["method_id"] = "B0_baseline"
     df_eval["novelty"] = df_eval["SMILES"].apply(lambda s: bool(s not in train_smiles_set))
     
-    # Reorder columns to match Section 10 specification exactly:
+    # Reorder columns matching Section 10 specification exactly:
     cols_order = [
-        "SMILES", "method_id", "pred_A_wavelength", "pred_A_delta_h",
-        "pred_B_wavelength", "pred_B_log_kp", "uncertainty_AD",
-        "synthetic_accessibility", "novelty", "dist_to_DA", "dist_to_DB",
-        "pass_constraints"
+        "SMILES", "method_id",
+        # Group A properties (MOST)
+        "pred_A_wavelength", "pred_A_pss", "pred_A_log_k", "synthetic_accessibility",
+        # Group B properties (UV / Skin Safety)
+        "pred_B_wavelength", "pred_B_log_eps", "potts_guy_log_kp", "molecular_weight", "log_p",
+        # Reliability and Distance
+        "uncertainty_AD", "novelty", "dist_to_DA", "dist_to_DB",
+        # Flags
+        "pass_group_A", "pass_group_B", "pass_ad", "pass_constraints"
     ]
     
-    # Ensure all required cols are present
-    for c in cols_order:
-        if c not in df_eval.columns:
-            df_eval[c] = np.nan
-            
     df_final = df_eval[cols_order].copy()
     
     # Calculate Joint Success Rate (JSR)
     jsr = df_final["pass_constraints"].mean()
-    print(f"\n>>> B0 Baseline Joint Success Rate (JSR): {jsr * 100:.2f}% <<<")
+    pass_a = df_final["pass_group_A"].mean()
+    pass_b = df_final["pass_group_B"].mean()
+    pass_ad = df_final["pass_ad"].mean()
+    
+    print("\n>>> B0 Baseline Multi-Criteria Results <<<")
+    print(f"  Pass Group A (all 4 MOST criteria):        {pass_a * 100:.2f}%")
+    print(f"  Pass Group B (all 4 UV/Skin criteria):     {pass_b * 100:.2f}%")
+    print(f"  Within Applicability Domain (reliable AD): {pass_ad * 100:.2f}%")
+    print(f"  Joint Success Rate (JSR - ALL criteria):   {jsr * 100:.2f}%\n")
     
     out_file = RESULTS_DIR / "generated_b0.csv"
     df_final.to_csv(out_file, index=False)
