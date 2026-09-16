@@ -72,6 +72,23 @@ MODELS_META = {
     },
 }
 
+def _ensure_file_from_github(local_path, rel_github_path):
+    if os.path.exists(local_path) and os.path.getsize(local_path) > 0:
+        return local_path
+    os.makedirs(os.path.dirname(local_path), exist_ok=True)
+    raw_url = f"https://raw.githubusercontent.com/suharevalexey/Case/main/{rel_github_path.replace(os.sep, '/')}"
+    print(f"[GitHub Sync] Downloading: {rel_github_path}...")
+    import urllib.request
+    req = urllib.request.Request(raw_url, headers={"User-Agent": "Mozilla/5.0"})
+    with urllib.request.urlopen(req) as resp, open(local_path, "wb") as f:
+        while True:
+            chunk = resp.read(1024 * 1024)
+            if not chunk:
+                break
+            f.write(chunk)
+    print(f"[GitHub Sync] Ready: {rel_github_path} ({os.path.getsize(local_path):,} bytes)")
+    return local_path
+
 class PropertyEvaluatorSuite:
     """
     Unified evaluator suite for all 6 properties across Group A and Group B.
@@ -81,12 +98,14 @@ class PropertyEvaluatorSuite:
     def __init__(self, base_dir=None):
         print("Loading Property Evaluator Suite...")
         if base_dir is None:
-            if os.path.exists("models/evaluators"):
-                base_dir = os.path.abspath(".")
-            elif os.path.exists("/content/Case/models/evaluators"):
+            if os.path.exists("/content/Case"):
                 base_dir = "/content/Case"
+            elif os.path.exists("models/evaluators"):
+                base_dir = os.path.abspath(".")
             elif os.path.exists("Case/models/evaluators"):
                 base_dir = os.path.abspath("Case")
+            elif os.path.exists("/content"):
+                base_dir = "/content/Case"
             else:
                 base_dir = BASE_DIR
 
@@ -101,21 +120,26 @@ class PropertyEvaluatorSuite:
             surr_path = os.path.join(models_dir, f"{key}_evaluator.joblib")
             orc_path = os.path.join(oracle_dir, f"{key}_oracle.joblib")
             
-            if os.path.exists(surr_path):
-                self.surrogates[key] = joblib.load(surr_path)
-            else:
-                raise FileNotFoundError(f"Surrogate model not found: {surr_path}")
+            if not (os.path.exists(surr_path) and os.path.getsize(surr_path) > 0):
+                _ensure_file_from_github(surr_path, f"models/evaluators/{key}_evaluator.joblib")
+            self.surrogates[key] = joblib.load(surr_path)
                 
-            if os.path.exists(orc_path):
-                self.oracles[key] = joblib.load(orc_path)
-            else:
-                raise FileNotFoundError(f"Oracle model not found: {orc_path}")
+            if not (os.path.exists(orc_path) and os.path.getsize(orc_path) > 0):
+                _ensure_file_from_github(orc_path, f"models/oracle/{key}_oracle.joblib")
+            self.oracles[key] = joblib.load(orc_path)
                 
         print(f"Successfully loaded {len(self.surrogates)} Group A/B surrogate models and {len(self.oracles)} oracle models.")
 
         # Load reference datasets for Applicability Domain & Novelty
-        df_A = pd.read_csv(os.path.join(data_dir, "dataset_evaluators_group_A.csv"))
-        df_B = pd.read_csv(os.path.join(data_dir, "dataset_evaluators_group_B.csv"))
+        path_A = os.path.join(data_dir, "dataset_evaluators_group_A.csv")
+        path_B = os.path.join(data_dir, "dataset_evaluators_group_B.csv")
+        if not (os.path.exists(path_A) and os.path.getsize(path_A) > 0):
+            _ensure_file_from_github(path_A, "data/processed/dataset_evaluators_group_A.csv")
+        if not (os.path.exists(path_B) and os.path.getsize(path_B) > 0):
+            _ensure_file_from_github(path_B, "data/processed/dataset_evaluators_group_B.csv")
+
+        df_A = pd.read_csv(path_A)
+        df_B = pd.read_csv(path_B)
         
         smiles_A_series = df_A["canonical_smiles"].dropna()
         smiles_B_series = df_B["canonical_smiles"].dropna()
