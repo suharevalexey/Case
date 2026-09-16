@@ -21,6 +21,3 @@ scratch_*.json
 
 # Large raw data (reproducible from manifest via download scripts)
 data/raw/
-
-# Model binaries (weights generated via training notebook)
-*.joblib
