@@ -1,0 +1,26 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.class
+
+# Jupyter Checkpoints
+.ipynb_checkpoints/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Caches and temporary files
+*.npz
+*.log
+*.tmp
+push_*.json
+scratch_*.json
+.DS_Store
+
+# Large raw data (reproducible from manifest via download scripts)
+data/raw/
+
+# Model binaries (weights generated via training notebook)
+*.joblib

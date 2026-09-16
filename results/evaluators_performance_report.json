@@ -1,0 +1,56 @@
+{
+  "absorption_max_nm": {
+    "type": "regression",
+    "n_train": 17123,
+    "n_test": 4281,
+    "R2": 0.8403719170597189,
+    "MAE": 29.906729582572375,
+    "RMSE": 44.86034262567687,
+    "mean_uncertainty": 41.696971033765074
+  },
+  "log_extinction": {
+    "type": "regression",
+    "n_train": 3169,
+    "n_test": 793,
+    "R2": 0.7059892680949816,
+    "MAE": 0.23062486738365479,
+    "RMSE": 0.3374392036949682,
+    "mean_uncertainty": 0.29553003006829415
+  },
+  "photochem_efficiency": {
+    "type": "regression",
+    "n_train": 4560,
+    "n_test": 1140,
+    "R2": 0.3952175595339211,
+    "MAE": 0.18112752732428478,
+    "RMSE": 0.22730020885430102,
+    "mean_uncertainty": 0.17431463132215577
+  },
+  "log_kp": {
+    "type": "regression",
+    "n_train": 81,
+    "n_test": 21,
+    "R2": 0.4382507539984052,
+    "MAE": 0.6286762650821976,
+    "RMSE": 0.9486322062273628,
+    "mean_uncertainty": 0.7391690504989695
+  },
+  "skin_sensitization": {
+    "type": "classification",
+    "n_train": 1050,
+    "n_test": 263,
+    "ROC_AUC": 0.8590380549682876,
+    "F1": 0.5111111111111111,
+    "Accuracy": 0.8326996197718631,
+    "mean_uncertainty": 0.27192429147762764
+  },
+  "skin_irritation": {
+    "type": "classification",
+    "n_train": 187,
+    "n_test": 47,
+    "ROC_AUC": 0.7106227106227107,
+    "F1": 0.7586206896551724,
+    "Accuracy": 0.7021276595744681,
+    "mean_uncertainty": 0.2613740870108099
+  }
+}

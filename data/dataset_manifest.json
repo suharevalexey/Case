@@ -1,0 +1,135 @@
+[
+  {
+    "group": "group_A",
+    "filename": "M01_dft_comparison.csv",
+    "size_bytes": 40363,
+    "sha256": "a2a9883dcd9bb7d6a2c8c6c825df2cb2059de82b3374cc430cd87bc899da95d5",
+    "read_only": true
+  },
+  {
+    "group": "group_A",
+    "filename": "M01_paper_allDB.csv",
+    "size_bytes": 559088,
+    "sha256": "5771445c6ec38d2333f65f3bb7c787c42c0632cd5034e20e94ef8e3ee2c34d55",
+    "read_only": true
+  },
+  {
+    "group": "group_A",
+    "filename": "M01_photoswitches.csv",
+    "size_bytes": 44051,
+    "sha256": "4d18321fea3618acd4d7910f5e2a6e4da20640dfcfc43e939e60a96baf78ed09",
+    "read_only": true
+  },
+  {
+    "group": "group_A",
+    "filename": "M01_purchasable_switch.csv",
+    "size_bytes": 381972,
+    "sha256": "81a55d1d931cc1a4f9da38258b298e1cbb9ab28de9092c4b74eda9352b161f3b",
+    "read_only": true
+  },
+  {
+    "group": "group_A",
+    "filename": "M02_AS-training-data.csv",
+    "size_bytes": 7266,
+    "sha256": "b071c6a0cd02824aca565d24d296ac5325fe0b104d8ca804ecb6bfaf98de019c",
+    "read_only": true
+  },
+  {
+    "group": "group_A",
+    "filename": "M02_unlabeled_255k_coreid.txt",
+    "size_bytes": 13610220,
+    "sha256": "1118a47ecfa27be1f703525716853456564c167833b957f915889028908f447c",
+    "read_only": true
+  },
+  {
+    "group": "group_A",
+    "filename": "M11_DB_for_chromophore_Sci_Data_rev03.csv",
+    "size_bytes": 3213377,
+    "sha256": "f92a55144c46ca0a0ef063c5ea82996161d65ea5c21643796cdeb897e173994c",
+    "read_only": true
+  },
+  {
+    "group": "group_A",
+    "filename": "M13_uvvisml_all_lambda_max_abs.csv",
+    "size_bytes": 2635270,
+    "sha256": "2bd2c1be659c774f198e51d2f8a7d2a5d660babff557884b72de1f0191b61707",
+    "read_only": true
+  },
+  {
+    "group": "group_B",
+    "filename": "U01_EU_CosIng_Annex_VI_UV_Filters.csv",
+    "size_bytes": 3710,
+    "sha256": "8c4b1d03c072cf7d36c394b43e787b2c37d2658c5d36f37d278019c9bf9ccf5c",
+    "read_only": true
+  },
+  {
+    "group": "group_B",
+    "filename": "U07_ADME_Parameters.xlsx",
+    "size_bytes": 291265,
+    "sha256": "c6c2c139772db3a8c79cb21e287b890ec1f5618ea314ece2366a701602443dc1",
+    "read_only": true
+  },
+  {
+    "group": "group_B",
+    "filename": "U07_Acute_Dermal_Toxicity.xlsx",
+    "size_bytes": 244068,
+    "sha256": "25db88ffa9558dae5c47bd8a2cdfe9bbadde161c68787d8ea4725a6e2663b11d",
+    "read_only": true
+  },
+  {
+    "group": "group_B",
+    "filename": "U07_ChemicalTaxonomies.zip",
+    "size_bytes": 83567399,
+    "sha256": "d4fd4e3be649b7c23b6022562c4162b8777939fcba125ab0862dad12031a350c",
+    "read_only": true
+  },
+  {
+    "group": "group_B",
+    "filename": "U07_Chemical_Functional_Use_Categories.xlsx",
+    "size_bytes": 19847189,
+    "sha256": "897653e7a8952d311977c723417a5e2e5c1e81aa6eee7fea557499aadcdd4f08",
+    "read_only": true
+  },
+  {
+    "group": "group_B",
+    "filename": "U07_Eye_Irritation.xlsx",
+    "size_bytes": 187392,
+    "sha256": "f9172ab89428b7c0cfd40037922c8b6b92f9fb15caeafb5d2dfc6aeeaf376be1",
+    "read_only": true
+  },
+  {
+    "group": "group_B",
+    "filename": "U07_Skin_Irritation_Corrosion.xlsx",
+    "size_bytes": 718822,
+    "sha256": "f98e3fdec706fedc261a35786524dd47ee1eb68aaee982adb87295488aa31a6f",
+    "read_only": true
+  },
+  {
+    "group": "group_B",
+    "filename": "U07_Skin_Sensitization.xlsx",
+    "size_bytes": 1817387,
+    "sha256": "7c02a9157abf5070b5bcea8918e2acf2482363bf8c03086d566071ae6c250895",
+    "read_only": true
+  },
+  {
+    "group": "group_B",
+    "filename": "U08_SARA-ICE_database_26-05-2023.xlsx",
+    "size_bytes": 324447,
+    "sha256": "3a28e2ec04c061b17e1a363428e2c7ffe7226d9ce7b1ded5c819dbfee3df8e80",
+    "read_only": true
+  },
+  {
+    "group": "group_B",
+    "filename": "U09_HPPT_database_14feb2023.xlsx",
+    "size_bytes": 734089,
+    "sha256": "69a6f36d8aec0ff3f67bc32b7499cb93c83999dae125d7907ded79254d5b275a",
+    "read_only": true
+  },
+  {
+    "group": "group_B",
+    "filename": "U12_SkinPiX_20230620_cleanedDB.xlsx",
+    "size_bytes": 55246,
+    "sha256": "a9ed97618a1218fcaf4240a724fa8ae6f709bbb63fa25ad56f5f5ff797709770",
+    "read_only": true
+  }
+]
