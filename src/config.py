@@ -4,12 +4,15 @@ from pathlib import Path
 # Paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
+SOURCES_DIR = DATA_DIR / "sources"
+SOURCES_A_DIR = SOURCES_DIR / "group_A"
+SOURCES_B_DIR = SOURCES_DIR / "group_B"
 RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 MODELS_DIR = BASE_DIR / "models"
 RESULTS_DIR = BASE_DIR / "results"
 
-for d in [RAW_DATA_DIR, PROCESSED_DATA_DIR, MODELS_DIR, RESULTS_DIR]:
+for d in [SOURCES_A_DIR, SOURCES_B_DIR, RAW_DATA_DIR, PROCESSED_DATA_DIR, MODELS_DIR, RESULTS_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 # Random Seed for reproducibility
@@ -24,13 +27,14 @@ CRITERIA = {
     "most_wavelength_min": 310.0,  # nm
     "most_wavelength_max": 420.0,  # nm
     
-    # 2. Photostationary state (PSS): fraction of charged isomer (Slides 11, 12)
-    "most_pss_min": 60.0,          # % (Z PhotoStationaryState >= 60%)
+    # 2. Specific energy storage capacity (Slides 8, 11, 12)
+    # Delta H_storage >= 40.0 kJ/mol (or >= 0.3 MJ/kg) calculated via valence isomerization strain
+    "most_delta_h_min": 40.0,      # kJ/mol
     
-    # 3. Thermal isomerization kinetic barrier: stability at skin temp ~32-35°C (Slide 13)
-    # k(T) = (k_B T / h) exp(-Delta G / RT), t_1/2 = ln 2 / k.
-    # log10(k_thermal) <= -3.0 corresponds to t_1/2 >= 1000 s (~1-8 hours storage)
+    # 3. Thermal isomerization kinetic barrier / half-life stability at skin temp ~32-35°C (Slide 13)
+    # log10(k_thermal) <= -3.0 corresponds to t_1/2 >= 1-8 hours storage
     "most_log_k_max": -3.0,        # log10(s^-1)
+    "most_pss_min": 60.0,          # % (Z PhotoStationaryState >= 60%)
     
     # 4. Synthetic accessibility score (Slides 17, 22, Section 6)
     "most_sa_max": 4.5,            # Ertl SA score <= 4.5 (1 = trivial, 10 = intractable)

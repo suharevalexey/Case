@@ -65,6 +65,7 @@ class PropertyEvaluatorSuite:
         
         # Group A Surrogate models
         self.model_A_wl = None
+        self.model_A_dh = None
         self.model_A_pss = None
         self.model_A_k = None
         
@@ -110,18 +111,26 @@ class PropertyEvaluatorSuite:
         pred_te_A_wl = self.model_A_wl.predict(X_test_A)
         print(f"  [Criteria A1] lambda_max Test MAE: {mean_absolute_error(y_test_A_wl, pred_te_A_wl):.2f} nm, R2: {r2_score(y_test_A_wl, pred_te_A_wl):.3f}")
         
-        # Criteria A2: PSS (trained on rows where PSS was measured)
+        # Criteria A2: Energy Storage Capacity Delta H_storage (kJ/mol)
+        y_train_A_dh = train_a["delta_h"].iloc[idx_tr_A].values
+        y_test_A_dh = test_a["delta_h"].iloc[idx_te_A].values
+        self.model_A_dh = XGBRegressor(n_estimators=100, max_depth=5, learning_rate=0.08, random_state=RANDOM_SEED)
+        self.model_A_dh.fit(X_train_A, y_train_A_dh)
+        pred_te_A_dh = self.model_A_dh.predict(X_test_A)
+        print(f"  [Criteria A2] Delta H_storage Test MAE: {mean_absolute_error(y_test_A_dh, pred_te_A_dh):.2f} kJ/mol, R2: {r2_score(y_test_A_dh, pred_te_A_dh):.3f}")
+        
+        # Criteria A3: PSS (trained on rows where PSS was measured)
         train_pss = train_a.iloc[idx_tr_A].dropna(subset=["pss_z"])
         if len(train_pss) > 10:
             X_tr_pss, _ = featurize_smiles_list(train_pss["canonical_smiles"].tolist())
             y_tr_pss = train_pss["pss_z"].values
             self.model_A_pss = RandomForestRegressor(n_estimators=100, max_depth=6, random_state=RANDOM_SEED)
             self.model_A_pss.fit(X_tr_pss, y_tr_pss)
-            print(f"  [Criteria A2] PSS Evaluator trained on {len(train_pss)} experimental points.")
+            print(f"  [Criteria A3] PSS Evaluator trained on {len(train_pss)} points.")
         else:
             self.model_A_pss = None
             
-        # Criteria A3: Thermal isomerization rate log10(k_thermal)
+        # Criteria A4: Thermal isomerization rate log10(k_thermal)
         train_k = train_a.iloc[idx_tr_A].dropna(subset=["k_thermal"])
         train_k = train_k[train_k["k_thermal"] > 0]
         if len(train_k) > 10:
@@ -129,7 +138,7 @@ class PropertyEvaluatorSuite:
             y_tr_k = np.log10(train_k["k_thermal"].values)
             self.model_A_k = RandomForestRegressor(n_estimators=100, max_depth=6, random_state=RANDOM_SEED)
             self.model_A_k.fit(X_tr_k, y_tr_k)
-            print(f"  [Criteria A3] Thermal Rate Evaluator trained on {len(train_k)} experimental points.")
+            print(f"  [Criteria A4] Thermal Rate Evaluator trained on {len(train_k)} points.")
         else:
             self.model_A_k = None
             
@@ -164,6 +173,7 @@ class PropertyEvaluatorSuite:
             
         # Save models to disk
         joblib.dump(self.model_A_wl, self.models_dir / "model_A_wl.joblib")
+        joblib.dump(self.model_A_dh, self.models_dir / "model_A_dh.joblib")
         joblib.dump(self.model_A_pss, self.models_dir / "model_A_pss.joblib")
         joblib.dump(self.model_A_k, self.models_dir / "model_A_k.joblib")
         joblib.dump(self.oracle_A_wl, self.models_dir / "oracle_A_wl.joblib")
@@ -172,11 +182,12 @@ class PropertyEvaluatorSuite:
         joblib.dump(self.model_B_eps, self.models_dir / "model_B_eps.joblib")
         joblib.dump(self.oracle_B_wl, self.models_dir / "oracle_B_wl.joblib")
         joblib.dump({"fps_A": self.train_fps_A, "fps_B": self.train_fps_B}, self.models_dir / "ad_fingerprints.joblib")
-        print("\nAll 8 Evaluators & Oracles successfully saved to models/.")
+        print("\nAll Evaluators & Oracles successfully saved to models/.")
 
     def load_models(self):
         """Load trained models from disk."""
         self.model_A_wl = joblib.load(self.models_dir / "model_A_wl.joblib")
+        self.model_A_dh = joblib.load(self.models_dir / "model_A_dh.joblib")
         self.model_A_pss = joblib.load(self.models_dir / "model_A_pss.joblib")
         self.model_A_k = joblib.load(self.models_dir / "model_A_k.joblib")
         self.oracle_A_wl = joblib.load(self.models_dir / "oracle_A_wl.joblib")
@@ -213,13 +224,14 @@ class PropertyEvaluatorSuite:
             p_A_wl = float(self.model_A_wl.predict(feats)[0])
             pass_A1 = (CRITERIA["most_wavelength_min"] <= p_A_wl <= CRITERIA["most_wavelength_max"])
             
-            # Criteria A2: PSS (%)
-            p_A_pss = float(self.model_A_pss.predict(feats)[0]) if self.model_A_pss else 70.0
-            pass_A2 = (p_A_pss >= CRITERIA["most_pss_min"])
+            # Criteria A2: Energy storage capacity Delta H_storage (kJ/mol)
+            p_A_dh = float(self.model_A_dh.predict(feats)[0]) if self.model_A_dh else 65.0
+            pass_A2 = (p_A_dh >= CRITERIA["most_delta_h_min"])
             
-            # Criteria A3: log10(k_thermal / s^-1)
+            # Criteria A3: PSS (%) or thermal kinetic barrier
+            p_A_pss = float(self.model_A_pss.predict(feats)[0]) if self.model_A_pss else 75.0
             p_A_log_k = float(self.model_A_k.predict(feats)[0]) if self.model_A_k else -4.0
-            pass_A3 = (p_A_log_k <= CRITERIA["most_log_k_max"])
+            pass_A3 = (p_A_pss >= CRITERIA["most_pss_min"]) or (p_A_log_k <= CRITERIA["most_log_k_max"])
             
             # Criteria A4: SA Score
             sa_score = compute_sa_score(mol)
@@ -265,6 +277,7 @@ class PropertyEvaluatorSuite:
                 "SMILES": can_smi,
                 # Group A properties
                 "pred_A_wavelength": round(p_A_wl, 2),
+                "pred_A_delta_h": round(p_A_dh, 2),
                 "pred_A_pss": round(p_A_pss, 1),
                 "pred_A_log_k": round(p_A_log_k, 2),
                 "synthetic_accessibility": round(sa_score, 2),

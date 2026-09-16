@@ -1,0 +1,17 @@
+name,INCI,SMILES,max_concentration,UV_band
+Avobenzone,Butyl Methoxydibenzoylmethane,CC(C)(C)c1ccc(cc1)C(=O)CC(=O)c2ccc(OC)cc2,0.05,UVA
+Octinoxate,Ethylhexyl Methoxycinnamate,CCCCC(CC)COC(=O)/C=C/c1ccc(OC)cc1,0.1,UVB
+Octocrylene,Octocrylene,CCCCC(CC)COC(=O)C(=C(c1ccccc1)c2ccccc2)C#N,0.1,UVB/UVA2
+Oxybenzone,Benzophenone-3,COc1ccc(C(=O)c2ccccc2)c(O)c1,0.06,UVA/UVB
+Homosalate,Homosalate,CC1(C)CCCC(C1)(C)OC(=O)c2ccccc2O,0.1,UVB
+Octisalate,Ethylhexyl Salicylate,CCCCC(CC)COC(=O)c1ccccc1O,0.05,UVB
+Ensulizole,Phenylbenzimidazole Sulfonic Acid,O=S(=O)(O)c1ccc2[nH]c(nc2c1)c3ccccc3,0.08,UVB
+Bemotrizinol,Bis-Ethylhexyloxyphenol Methoxyphenyl Triazine,CCCCC(CC)COc1ccc(cc1)c2nc(nc(n2)c3ccc(OCC(CC)CCCC)cc3)c4ccc(OC)cc4,0.1,Broadband (UVA/UVB)
+Bisoctrizole,Methylene Bis-Benzotriazolyl Tetramethylbutylphenol,CC(C)(C)CC(C)(C)c1cc(c(O)c(c1)Cc2cc(c(O)c(c2)n3nc4ccccc4n3)C(C)(C)CC(C)(C)C)n5nc6ccccc6n5,0.1,Broadband (UVA/UVB)
+Iscotrizinol,Diethylhexyl Butamido Triazone,CCCC(CC)COC(=O)c1ccc(NC(=O)c2nc(nc(n2)Nc3ccc(C(=O)OCC(CC)CCCC)cc3)Nc4ccc(C(=O)OC(C)C)cc4)cc1,0.1,UVB
+Mexoryl SX,Terephthalylidene Dicamphor Sulfonic Acid,CC1(C)C2CC(=Cc3ccc(cc3)C=C4C(=O)C5(C)CCC4C5(C)CS(=O)(=O)O)C(=O)C1(C)C2,0.1,UVA1
+Drometrizole Trisiloxane,Drometrizole Trisiloxane,C[Si](C)(O[Si](C)(C)C)CCCn1nc2ccccc2n1,0.15,Broadband (UVA/UVB)
+Cinoxate,Cinoxate,CCOCCOC(=O)/C=C/c1ccc(OC)cc1,0.05,UVB
+Padimate O,Ethylhexyl Dimethyl PABA,CCCCC(CC)COC(=O)c1ccc(N(C)C)cc1,0.08,UVB
+Sulisobenzone,Benzophenone-4,COc1ccc(C(=O)c2ccccc2)c(O)c1S(=O)(=O)O,0.05,UVA/UVB
+Octyl Triazone,Ethylhexyl Triazone,CCCCC(CC)COC(=O)c1ccc(Nc2nc(nc(n2)Nc3ccc(C(=O)OCC(CC)CCCC)cc3)Nc4ccc(C(=O)OCC(CC)CCCC)cc4)cc1,0.05,UVB

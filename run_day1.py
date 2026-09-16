@@ -87,6 +87,7 @@ def main():
         "pass_ad_rate": pass_ad,
         "joint_success_rate": jsr,
         "mean_pred_A_wl": float(df_generated_b0["pred_A_wavelength"].mean()),
+        "mean_pred_A_dh": float(df_generated_b0["pred_A_delta_h"].mean()),
         "mean_pred_A_pss": float(df_generated_b0["pred_A_pss"].mean()),
         "mean_pred_B_wl": float(df_generated_b0["pred_B_wavelength"].mean()),
         "mean_pred_B_eps": float(df_generated_b0["pred_B_log_eps"].mean()),

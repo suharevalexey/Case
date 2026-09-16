@@ -167,7 +167,7 @@ def run_baseline_b0_pipeline(evaluator_suite: PropertyEvaluatorSuite) -> pd.Data
     cols_order = [
         "SMILES", "method_id",
         # Group A properties (MOST)
-        "pred_A_wavelength", "pred_A_pss", "pred_A_log_k", "synthetic_accessibility",
+        "pred_A_wavelength", "pred_A_delta_h", "pred_A_pss", "pred_A_log_k", "synthetic_accessibility",
         # Group B properties (UV / Skin Safety)
         "pred_B_wavelength", "pred_B_log_eps", "potts_guy_log_kp", "molecular_weight", "log_p",
         # Reliability and Distance
