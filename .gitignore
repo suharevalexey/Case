@@ -11,13 +11,9 @@ venv/
 env/
 .venv/
 
-# Caches and temporary files
-*.npz
+# Temporary files
 *.log
 *.tmp
 push_*.json
 scratch_*.json
 .DS_Store
-
-# Large raw data (reproducible from manifest via download scripts)
-data/raw/

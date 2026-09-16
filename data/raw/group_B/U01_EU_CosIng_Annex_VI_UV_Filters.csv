@@ -1,0 +1,27 @@
+Annex_VI_No,INCI_Name,CAS_No,EC_No,Max_Concentration_Percent,UV_Band,SMILES
+1,4-Aminobenzoic acid (PABA),150-13-0,205-753-0,5.0,UVB,NC1=CC=C(C(=O)O)C=C1
+2,Camphor benzalkonium methosulfate,52793-97-2,258-190-8,6.0,UVB,CC1(C)C2CCC1(CS(=O)(=O)[O-])C(=O)C2=CC3=CC=[N+](C)(C)CC4=CC=CC=C43.COS(=O)(=O)[O-]
+3,Homosalate,118-56-9,204-260-8,7.34,UVB,CC1(C)CC(C)CC(OC(=O)C2=CC=CC=C2O)C1
+4,Benzophenone-3 (Oxybenzone),131-57-7,205-031-5,6.0,UVB/UVA,COC1=CC(=C(C=C1)C(=O)C2=CC=CC=C2)O
+6,Phenylbenzimidazole sulfonic acid (Ensulizole),27503-81-7,248-502-0,8.0,UVB,O=S(=O)(O)C1=CC2=C(NC(=N2)C3=CC=CC=C3)C=C1
+7,Terephthalylidene dicamphor sulfonic acid (Ecamsule / Mexoryl SX),90457-82-2,410-960-6,10.0,UVA,CC1(C)C2CCC1(CS(=O)(=O)O)C(=O)C2=CC3=CC=C(C=C3)C=C4C(=O)C5CCC4(CS(=O)(=O)O)C5(C)C
+8,Butyl methoxydibenzoylmethane (Avobenzone),70356-09-1,274-581-6,5.0,UVA,CC(C)(C)C1=CC=C(C=C1)C(=O)CC(=O)C2=CC=C(OC)C=C2
+9,Benzylidene camphor sulfonic acid,56039-58-8,260-112-0,6.0,UVB,CC1(C)C2CCC1(CS(=O)(=O)O)C(=O)C2=CC3=CC=CC=C3
+10,Octocrylene,6197-30-4,228-250-8,9.0,UVB/UVA,CCCCC(CC)COC(=O)C(C#N)=C(C1=CC=CC=C1)C2=CC=CC=C2
+11,Polyacrylamidomethyl benzylidene camphor,113783-61-2,601-294-8,6.0,UVB,CC1(C)C2CCC1(CS(=O)(=O)NC(=O)C=C)C(=O)C2=CC3=CC=CC=C3
+12,Ethylhexyl methoxycinnamate (Octinoxate),5466-77-3,226-775-7,10.0,UVB,CCCCC(CC)COC(=O)C=CC1=CC=C(OC)C=C1
+13,PEG-25 PABA,116242-27-4,601-389-4,10.0,UVB,CCN(CCOCCOC(=O)C1=CC=C(N)C=C1)CCOCCOC(=O)C2=CC=C(N)C=C2
+14,Isoamyl p-methoxycinnamate (Amiloxate),71617-10-2,275-702-5,10.0,UVB,CC(C)CCOC(=O)C=CC1=CC=C(OC)C=C1
+15,Ethylhexyl triazone (Uvinul T 150),88122-99-0,402-070-1,5.0,UVB,CCCCC(CC)COC(=O)C1=CC=C(NC2=NC(=NC(=N2)NC3=CC=C(C=C3)C(=O)OCC(CC)CCCC)NC4=CC=C(C=C4)C(=O)OCC(CC)CCCC)C=C1
+16,Drometrizole trisiloxane (Mexoryl XL),155633-54-8,422-040-5,15.0,UVB/UVA,CC1=CC(N2N=C3C=CC=CC3=N2)=C(O)C(=C1)CCC[Si](O[Si](C)(C)C)(O[Si](C)(C)C)C
+17,Diethylhexyl butamido triazone (Iscotrizinol / Uvasorb HEB),154702-15-5,421-450-8,10.0,UVB,CCCCC(CC)COC(=O)C1=CC=C(NC2=NC(=NC(=N2)NC3=CC=C(C=C3)C(=O)NC(C)(C)C)NC4=CC=C(C=C4)C(=O)OCC(CC)CCCC)C=C1
+18,4-Methylbenzylidene camphor (Enzacamene),36861-47-9,253-242-6,4.0,UVB,CC1=CC=C(C=C1)C=C2C(=O)C3(C)CCC2C3(C)C
+20,Ethylhexyl salicylate (Octisalate),118-60-5,204-263-4,5.0,UVB,CCCCC(CC)COC(=O)C1=CC=CC=C1O
+21,Ethylhexyl dimethyl PABA (Padimate O),21245-02-3,244-289-3,8.0,UVB,CCCCC(CC)COC(=O)C1=CC=C(N(C)C)C=C1
+22,Benzophenone-4 (Sulisobenzone),4065-45-6,223-772-2,5.0,UVB/UVA,COC1=CC(=C(C=C1)C(=O)C2=CC=CC=C2)O.S(=O)(=O)(O)C3=CC=C(O)C(=C3)C(=O)C4=CC=CC=C4
+23,Methylene bis-benzotriazolyl tetramethylbutylphenol (Bisoctrizole / Tinosorb M),103597-45-1,403-800-1,10.0,Broad (UVB/UVA),CC(C)(C)CC(C)(C)C1=CC(=C(O)C(=C1)CC2=C(O)C(=CC(=C2)C(C)(C)CC(C)(C)C)N3N=C4C=CC=CC4=N3)N5N=C6C=CC=CC6=N5
+24,Bis-ethylhexyloxyphenol methoxyphenyl triazine (Bemotrizinol / Tinosorb S),187393-00-6,425-950-7,10.0,Broad (UVB/UVA),CCCCC(CC)COC1=CC=C(C=C1)C2=NC(=NC(=N2)C3=CC=C(OCC(CC)CCCC)C=C3)C4=CC=C(OC)C=C4O
+25,Disodium phenyl dibenzimidazole tetrasulfonate (Bisdisulizole disodium / Neo Heliopan AP),180898-37-7,429-740-6,10.0,UVA,[Na+].[Na+].[O-]S(=O)(=O)C1=CC2=C(NC(=N2)C3=C(C=C(C=C3)S(=O)(=O)[O-])C4=NC5=C(N4)C=C(C=C5)S(=O)(=O)[O-])C=C1
+28,Diethylamino hydroxybenzoyl hexyl benzoate (Uvinul A Plus),302776-68-7,443-860-6,10.0,UVA,O=C(OCCCCCC)C1=CC=CC=C1C(=O)C2=CC=C(N(CC)CC)C=C2O
+29,Tris-biphenyl triazine (Tinosorb A2B),31274-51-8,484-750-4,10.0,Broad (UVB/UVA),C1=CC=C(C=C1)C2=CC=C(C=C2)C3=NC(=NC(=N3)C4=CC=C(C=C4)C5=CC=CC=C5)C6=CC=C(C=C6)C7=CC=CC=C7
+30,Phenylene bis-diphenyltriazine (TriAsorB),55514-22-2,259-684-0,5.0,Broad (UVB/UVA/HEV),C1=CC=C(C=C1)C2=NC(=NC(=N2)C3=CC=C(C=C3)C4=NC(=NC(=N4)C5=CC=CC=C5)C6=CC=CC=C6)C7=CC=CC=C7
