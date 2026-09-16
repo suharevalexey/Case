@@ -10,8 +10,9 @@ from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, roc_auc_score, f1_score, accuracy_score
 import xgboost as xgb
 
-BASE_DIR = r"C:\Users\xfast\.gemini\antigravity\scratch\most_uv_molecular_design"
-sys.path.insert(0, os.path.join(BASE_DIR, "src"))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if os.path.join(BASE_DIR, "src") not in sys.path:
+    sys.path.insert(0, os.path.join(BASE_DIR, "src"))
 
 from features import get_or_compute_cached_features
 from evaluator_model import EnsembleEvaluatorWrapper

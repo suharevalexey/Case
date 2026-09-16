@@ -9,8 +9,9 @@ import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import Descriptors, DataStructs
 
-BASE_DIR = r"C:\Users\xfast\.gemini\antigravity\scratch\most_uv_molecular_design"
-sys.path.insert(0, os.path.join(BASE_DIR, "src"))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if os.path.join(BASE_DIR, "src") not in sys.path:
+    sys.path.insert(0, os.path.join(BASE_DIR, "src"))
 
 from features import MORGAN_GEN
 from evaluators import PropertyEvaluatorSuite, MODELS_META

@@ -8,8 +8,9 @@ from rdkit.Chem import RDConfig, DataStructs
 sys.path.append(os.path.join(RDConfig.RDContribDir, 'SA_Score'))
 import sascorer
 
-BASE_DIR = r"C:\Users\xfast\.gemini\antigravity\scratch\most_uv_molecular_design"
-sys.path.insert(0, os.path.join(BASE_DIR, "src"))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if os.path.join(BASE_DIR, "src") not in sys.path:
+    sys.path.insert(0, os.path.join(BASE_DIR, "src"))
 
 from features import mol_to_features, MORGAN_GEN
 from applicability_domain import ApplicabilityDomainManager
@@ -77,14 +78,28 @@ class PropertyEvaluatorSuite:
     Loads Guidance Surrogate models (with epistemic uncertainty) and Independent Test Oracles.
     Also computes distances to training domains D_A and D_B (Applicability Domain) and SAScore.
     """
-    def __init__(self):
+    def __init__(self, base_dir=None):
         print("Loading Property Evaluator Suite...")
+        if base_dir is None:
+            if os.path.exists("models/evaluators"):
+                base_dir = os.path.abspath(".")
+            elif os.path.exists("/content/Case/models/evaluators"):
+                base_dir = "/content/Case"
+            elif os.path.exists("Case/models/evaluators"):
+                base_dir = os.path.abspath("Case")
+            else:
+                base_dir = BASE_DIR
+
+        models_dir = os.path.join(base_dir, "models", "evaluators")
+        oracle_dir = os.path.join(base_dir, "models", "oracle")
+        data_dir = os.path.join(base_dir, "data", "processed")
+
         self.surrogates = {}
         self.oracles = {}
         
         for key in MODELS_META.keys():
-            surr_path = os.path.join(MODELS_DIR, f"{key}_evaluator.joblib")
-            orc_path = os.path.join(ORACLE_DIR, f"{key}_oracle.joblib")
+            surr_path = os.path.join(models_dir, f"{key}_evaluator.joblib")
+            orc_path = os.path.join(oracle_dir, f"{key}_oracle.joblib")
             
             if os.path.exists(surr_path):
                 self.surrogates[key] = joblib.load(surr_path)
@@ -99,8 +114,8 @@ class PropertyEvaluatorSuite:
         print(f"Successfully loaded {len(self.surrogates)} Group A/B surrogate models and {len(self.oracles)} oracle models.")
 
         # Load reference datasets for Applicability Domain & Novelty
-        df_A = pd.read_csv(os.path.join(DATA_DIR, "dataset_evaluators_group_A.csv"))
-        df_B = pd.read_csv(os.path.join(DATA_DIR, "dataset_evaluators_group_B.csv"))
+        df_A = pd.read_csv(os.path.join(data_dir, "dataset_evaluators_group_A.csv"))
+        df_B = pd.read_csv(os.path.join(data_dir, "dataset_evaluators_group_B.csv"))
         
         smiles_A_series = df_A["canonical_smiles"].dropna()
         smiles_B_series = df_B["canonical_smiles"].dropna()

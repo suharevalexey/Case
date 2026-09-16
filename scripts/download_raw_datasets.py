@@ -7,7 +7,7 @@ import time
 import json
 import pandas as pd
 
-BASE_DIR = r"C:\Users\xfast\.gemini\antigravity\scratch\most_uv_molecular_design"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIR_GROUP_A = os.path.join(BASE_DIR, "data", "raw", "group_A")
 DIR_GROUP_B = os.path.join(BASE_DIR, "data", "raw", "group_B")
 
