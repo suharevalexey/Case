@@ -28,12 +28,12 @@
   },
   "log_kp": {
     "type": "regression",
-    "n_train": 81,
-    "n_test": 21,
-    "R2": 0.4382507539984052,
-    "MAE": 0.6286762650821976,
-    "RMSE": 0.9486322062273628,
-    "mean_uncertainty": 0.7391690504989695
+    "n_train": 219,
+    "n_test": 55,
+    "R2": 0.5657624950632345,
+    "MAE": 0.5170827693732012,
+    "RMSE": 0.7069483885565052,
+    "mean_uncertainty": 0.7365737929550822
   },
   "skin_sensitization": {
     "type": "classification",

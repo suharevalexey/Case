@@ -131,5 +131,12 @@
     "size_bytes": 55246,
     "sha256": "a9ed97618a1218fcaf4240a724fa8ae6f709bbb63fa25ad56f5f5ff797709770",
     "read_only": true
+  },
+  {
+    "group": "group_B",
+    "filename": "U10_huskinDB.csv",
+    "size_bytes": 134644,
+    "sha256": "0073b182b305a3ac70c2da808065b672e57ce69d68140806c3a2496d08fa02f9",
+    "read_only": true
   }
 ]
