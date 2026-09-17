@@ -46,6 +46,14 @@ MODELS_META = {
         "constraint_min": 0.25,
         "constraint_max": float("inf"),
     },
+    "group_A_log_half_life": {
+        "group": "A",
+        "target": "log_half_life",
+        "type": "regression",
+        "unit": "log10(s)",
+        "constraint_min": 3.56,
+        "constraint_max": float("inf"),
+    },
     "group_B_log_kp": {
         "group": "B",
         "target": "log_kp",

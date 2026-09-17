@@ -26,6 +26,15 @@
     "RMSE": 0.22730020885430102,
     "mean_uncertainty": 0.17431463132215577
   },
+  "log_half_life": {
+    "type": "regression",
+    "n_train": 60,
+    "n_test": 15,
+    "R2": 0.7795103735972388,
+    "MAE": 0.5259736766563772,
+    "RMSE": 0.7143776834370066,
+    "mean_uncertainty": 0.7066997622598432
+  },
   "log_kp": {
     "type": "regression",
     "n_train": 219,

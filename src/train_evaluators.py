@@ -50,6 +50,13 @@ PROPERTIES = [
         "target_col": "photochem_efficiency"
     },
     {
+        "name": "log_half_life",
+        "type": "regression",
+        "group": "group_A",
+        "description": "Log10 thermal isomerization half-life t1/2 (seconds)",
+        "target_col": "log_half_life"
+    },
+    {
         "name": "log_kp",
         "type": "regression",
         "group": "group_B",
