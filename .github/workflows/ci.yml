@@ -1,0 +1,28 @@
+name: B0 and M1 verification
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install the exact evaluation environment
+        run: python -m pip install -r requirements.txt
+      - name: Verify published data, models and results
+        run: |
+          python pipeline.py verify --complete
+          python -m pytest -q
+          python pipeline.py report
