@@ -35,23 +35,21 @@ Case/
 ├── README.md                           # Исчерпывающий отчет и научное обоснование проекта
 ├── DEFENSE_GUIDE.md                    # Памятка и ответы на каверзные вопросы эксперта
 ├── requirements.txt                     # Фиксация версий библиотек (RDKit, XGBoost, Scikit-learn)
-├── MOST_UV_End_to_End_Colab.ipynb      # Мастер-блокнот для интерактивного запуска в Google Colab
-├── REINVENT4_MOST_PARETO_v6.ipynb      # Генеративная модель M1: обучение 7 Pareto-агентов REINVENT4
-├── REINVENT4_MOST_PARETO_ANALYSIS_ALL_IN_ONE_COMMENTED_RU.ipynb # Полный анализ и визуализация M1
+├── MOST_UV_End_to_End_Colab.ipynb      # Мастер-блокнот валидации 7 свойств в Google Colab
+├── REINVENT4_MOST_B0_SCALAR_RL_NO_PARETO_3SEEDS_RU.ipynb # Базовый генератор B0: скалярный REINVENT4 RL (3 сида)
+├── REINVENT4_MOST_3SEEDS_EVALUATOR_ORACLE_ABLATION_RU_COLAB_FIX.ipynb # Генеративная модель M1: Парето REINVENT4 RL (3 сида)
 │
 ├── notebooks/                          # Пошаговые запущенные блокноты с визуализациями
 │   ├── 01_data_audit_and_preprocessing.ipynb      # Аудит целостности и проверка непересечения D_A ∩ D_B = ∅
 │   ├── 02_features_and_applicability_domain.ipynb # Дескрипторы ECFP4, SAScore и расстояния Танимото
-│   ├── 03_evaluator_models_and_oracle.ipynb       # Обучение 7 экспертов с неопределенностью и 7 оракулов
-│   └── 04_generative_strategy_b0.ipynb            # Запуск и бенчмаркинг базовой стратегии B0 (3000 молекул)
+│   └── 03_evaluator_models_and_oracle.ipynb       # Обучение 7 экспертов с неопределенностью и 7 оракулов
 │
 ├── src/                                # Модульный исходный код
 │   ├── features.py                     # Векторизация молекул (1024-бит ECFP4 + 12 RDKit дескрипторов)
 │   ├── applicability_domain.py         # Менеджер области применимости (Tanimoto distance к D_A и D_B)
 │   ├── evaluator_model.py              # Обертка ансамблевых суррогатов с оценкой дисперсии (sigma)
 │   ├── train_evaluators.py             # Обучение 7 экспертов и 7 независимых Оракулов
-│   ├── evaluators.py                   # Единый интерфейс оценки PropertyEvaluatorSuite (7 свойств)
-│   └── strategy_b0.py                  # Реализация базовой генеративной стратегии B0
+│   └── evaluators.py                   # Единый интерфейс оценки PropertyEvaluatorSuite (7 свойств)
 │
 ├── scripts/
 │   ├── download_raw_datasets.py        # Загрузка исходных датасетов
@@ -233,17 +231,17 @@ Case/
 ## 8. Воспроизводимость и запуск
 
 ### Быстрый старт в Google Colab
-1. **Базовая стратегия B0 и единый оценщик свойств**:
+1. **Валидация суррогатов и единый оценщик 7 свойств**:
    Откройте мастер-ноутбук [`MOST_UV_End_to_End_Colab.ipynb`](MOST_UV_End_to_End_Colab.ipynb) в Google Colab. Все 7 суррогатов, оракулы, зависимости и данные подтягиваются автоматически.
-2. **Генерация M1 (REINVENT4 Pareto)**:
-   Запуск обучения 7 агентов Парето: [`REINVENT4_MOST_PARETO_v6.ipynb`](REINVENT4_MOST_PARETO_v6.ipynb).
-3. **Анализ и визуализация результатов M1**:
-   Полный разбор воронки, интерактивных карт и отбора кандидатов: [`REINVENT4_MOST_PARETO_ANALYSIS_ALL_IN_ONE_COMMENTED_RU.ipynb`](REINVENT4_MOST_PARETO_ANALYSIS_ALL_IN_ONE_COMMENTED_RU.ipynb).
+2. **Базовый генератор B0 (REINVENT4 Scalar RL без Парето, 3 сида)**:
+   Запуск скалярного RL-агента REINVENT4 (equal-weight reward): [`REINVENT4_MOST_B0_SCALAR_RL_NO_PARETO_3SEEDS_RU.ipynb`](REINVENT4_MOST_B0_SCALAR_RL_NO_PARETO_3SEEDS_RU.ipynb).
+3. **Основная генеративная модель M1 (REINVENT4 Pareto RL, 3 сида)**:
+   Запуск обучения и абляции агентов Парето с независимой валидацией Оракулом: [`REINVENT4_MOST_3SEEDS_EVALUATOR_ORACLE_ABLATION_RU_COLAB_FIX.ipynb`](REINVENT4_MOST_3SEEDS_EVALUATOR_ORACLE_ABLATION_RU_COLAB_FIX.ipynb).
 
-### Локальный запуск
+### Локальная проверка оценщиков и данных
 ```bash
 git clone https://github.com/suharevalexey/Case.git
 cd Case
 pip install -r requirements.txt
-python src/strategy_b0.py --seeds 42 101 2024 --n_samples 1000
+python scripts/verify_v2_1.py
 ```
