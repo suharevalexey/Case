@@ -1,0 +1,28 @@
+name: Repository validation
+on:
+  push:
+    branches: [release/v3-unified]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: e5fc77e09304739ee9d31bbce2143b09e7a74f98
+          persist-credentials: false
+      - name: Export exactly the audited main commit
+        run: |
+          git rev-parse HEAD > SOURCE_COMMIT.txt
+          git archive --format=zip HEAD > main-snapshot.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: main-source-e5fc77e
+          path: |
+            main-snapshot.zip
+            SOURCE_COMMIT.txt
+          retention-days: 2
+          if-no-files-found: error
