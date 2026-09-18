@@ -1,0 +1,47 @@
+name: Engine preflight
+on:
+  push:
+    branches: [release/v3-unified]
+    paths: [.github/workflows/engine-preflight.yml]
+permissions:
+  contents: read
+jobs:
+  engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: reinvent-ee0d56f-python313-cpu-v1
+      - name: Fetch pinned sources and prior
+        run: |
+          curl -fLsS https://github.com/MolecularAI/REINVENT4/archive/ee0d56f4a07472bbb622cd0858184d06f11bff5d.zip -o engine-source.zip
+          unzip -q engine-source.zip
+          mv REINVENT4-ee0d56f4a07472bbb622cd0858184d06f11bff5d REINVENT4
+          curl -fLsS https://raw.githubusercontent.com/MolecularAI/REINVENT4/b44124489e8ddeabaccf5856b5d823f1574db063/priors/reinvent.prior -o reinvent.prior
+          python - <<'PY'
+          import hashlib
+          b=open('reinvent.prior','rb').read()
+          assert hashlib.sha1(f'blob {len(b)}\0'.encode()+b).hexdigest()=='0dee328238b3d413b5a34c80e3ddab49e4e0af28'
+          print('Prior verified')
+          PY
+      - name: Install and import the pinned engine
+        run: |
+          python -m venv engine-env
+          engine-env/bin/python -m pip install torch==2.12.0 torchvision --index-url https://download.pytorch.org/whl/cpu
+          engine-env/bin/python -m pip install -e REINVENT4
+          engine-env/bin/python -c 'from reinvent.Reinvent import main_script; print("Engine import successful")'
+          engine-env/bin/python -m pip freeze --exclude-editable > engine-lock.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: engine-preflight
+          path: |
+            engine-source.zip
+            reinvent.prior
+            engine-lock.txt
+          retention-days: 2
