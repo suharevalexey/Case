@@ -8,7 +8,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,7 +20,7 @@ jobs:
         with:
           path: ~/.cache/pip
           key: case-unified-python313-cpu-v3
-      - name: Apply the checked source payload
+      - name: Apply the checked main-derived source
         run: |
           python - <<'PY'
           import base64,hashlib,io,json,pathlib,zipfile
@@ -31,6 +31,7 @@ jobs:
           assert hashlib.sha256(raw).hexdigest()==ready['sha256'], 'Payload checksum mismatch'
           with zipfile.ZipFile(io.BytesIO(raw)) as z:
               manifest=json.loads(z.read('release_payload_manifest.json'))
+              assert manifest['base_commit']=='e5fc77e09304739ee9d31bbce2143b09e7a74f98'
               for name in manifest['delete']:
                   p=pathlib.Path(name)
                   assert not p.is_absolute() and '..' not in p.parts and '.git' not in p.parts
@@ -38,8 +39,7 @@ jobs:
               for name,digest in manifest['files'].items():
                   p=pathlib.Path(name)
                   assert not p.is_absolute() and '..' not in p.parts and '.git' not in p.parts
-                  data=z.read(name)
-                  assert hashlib.sha256(data).hexdigest()==digest
+                  data=z.read(name); assert hashlib.sha256(data).hexdigest()==digest
                   p.parent.mkdir(parents=True,exist_ok=True); p.write_bytes(data)
           overrides={}
           for source in (root/'.release/overrides').rglob('*'):
@@ -49,21 +49,38 @@ jobs:
               data=source.read_bytes(); p.parent.mkdir(parents=True,exist_ok=True); p.write_bytes(data)
               overrides[p.as_posix()]=hashlib.sha256(data).hexdigest()
           pathlib.Path('results').mkdir(exist_ok=True)
-          pathlib.Path('results/source_payload.json').write_text(json.dumps({'source_commit':manifest['base_commit'],'payload_sha256':ready['sha256'],'files':manifest['files'],'overrides':overrides},indent=2))
+          pathlib.Path('results/source_payload.json').write_text(json.dumps({'source_commit':manifest['base_commit'],'payload_sha256':ready['sha256'],'files':manifest['files'],'overrides':overrides,'finalizer_sha256':hashlib.sha256(pathlib.Path('.release/finalize_source.py').read_bytes()).hexdigest()},indent=2))
           PY
-      - name: Install the property environment
-        run: python -m pip install -r requirements.txt
+          python .release/finalize_source.py
+      - name: Install evaluation environment and fonts
+        run: |
+          python -m pip install -r requirements.txt
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-dejavu-core
       - name: Run core tests
         run: python -m pytest -q tests/test_core.py
-      - name: Rebuild data, train evaluators and exercise both generators
+      - name: Rebuild real data, train evaluators and smoke-test B0/M1
         run: python -u scripts/run_validation.py --smoke
-      - name: Run the controlled three-seed comparison and M1 ablation
-        run: python -u scripts/run_validation.py --reuse-models
-      - name: Validate real data and trained artifacts
+      - name: Validate evaluators and report layout before full generation
         run: |
+          python -m pytest -q
+          python scripts/build_report.py --draft
+      - name: Train B0 and M1 on three seeds and train the M1 ablation
+        run: python -u scripts/run_validation.py --reuse-models
+      - name: Validate complete experiment and build final documentation
+        run: |
+          set -o pipefail
           python -m pytest -q --junitxml=results/test_results.xml | tee results/test_results.log
-          python pipeline.py verify
-      - name: Package the source and experiment evidence
+          python pipeline.py verify --complete
+          python pipeline.py report
+          python - <<'PY'
+          import fitz,pathlib
+          p=pathlib.Path('docs/report_preview'); p.mkdir(exist_ok=True)
+          with fitz.open('docs/REPORT.pdf') as doc:
+              assert len(doc)==6
+              for i,page in enumerate(doc): page.get_pixmap(matrix=fitz.Matrix(1.2,1.2)).save(p/f'page-{i+1}.png')
+          PY
+      - name: Package reproducible source, checkpoints and logs
         if: always()
         env:
           BUILD_RUN_ID: ${{ github.run_id }}
@@ -71,25 +88,25 @@ jobs:
           python - <<'PY'
           import hashlib,json,os,pathlib,zipfile
           root=pathlib.Path('.'); out=pathlib.Path(os.environ['RUNNER_TEMP'])
-          excluded={'.git','.release','.venv-engine','external','runs','.pytest_cache','__pycache__'}
+          # Migration machinery is not part of the published project.
+          for name in ['.github/workflows/repository-validation.yml','.github/workflows/engine-preflight.yml']:
+              pathlib.Path(name).unlink(missing_ok=True)
+          excluded={'.git','.release','.venv-engine','external','runs','.pytest_cache','__pycache__','report_preview'}
           with zipfile.ZipFile(out/'case-validated.zip','w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
               for p in root.rglob('*'):
-                  if p.is_file() and not any(part in excluded for part in p.parts) and p.name!='features.npz':
-                      z.write(p,p.as_posix())
-          rows=[]
+                  if p.is_file() and not any(part in excluded for part in p.parts) and p.name!='features.npz': z.write(p,p.as_posix())
           completed=root/'results/experiment.json'
           run_id=json.loads(completed.read_text())['run_id'] if completed.exists() else None
+          rows=[]
           with zipfile.ZipFile(out/'B0_M1_checkpoints.zip','w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
-              for p in root.glob(f'runs/{run_id}/none/**/agent.chkpt') if run_id else []:
-                  name=p.relative_to(root/'runs'/run_id/'none').as_posix()
-                  digest=hashlib.sha256(p.read_bytes()).hexdigest()
-                  rows.append({'file':name,'sha256':digest,'size_bytes':p.stat().st_size})
+              for p in root.glob(f'runs/{run_id}/**/agent.chkpt') if run_id else []:
+                  name=p.relative_to(root/'runs'/run_id).as_posix()
+                  rows.append({'file':name,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'size_bytes':p.stat().st_size})
                   z.write(p,name)
               z.writestr('manifest.json',json.dumps(rows,indent=2))
           with zipfile.ZipFile(out/'run-evidence.zip','w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
               for p in root.glob('runs/**/*'):
-                  if p.is_file() and p.name not in {'agent.chkpt','client.json'} and not p.name.startswith('events.out.tfevents'):
-                      z.write(p,p.as_posix())
+                  if p.is_file() and p.name not in {'agent.chkpt','client.json'} and not p.name.startswith('events.out.tfevents'): z.write(p,p.as_posix())
           (out/'BUILD_RUN_ID.txt').write_text(os.environ['BUILD_RUN_ID'])
           PY
       - uses: actions/upload-artifact@v4
@@ -99,19 +116,26 @@ jobs:
           path: |
             ${{ runner.temp }}/case-validated.zip
             ${{ runner.temp }}/BUILD_RUN_ID.txt
-          retention-days: 2
+          retention-days: 30
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: experiment-evidence
           path: ${{ runner.temp }}/run-evidence.zip
-          retention-days: 2
+          retention-days: 30
       - uses: actions/upload-artifact@v4
         if: success()
         with:
           name: B0-M1-checkpoints
           path: ${{ runner.temp }}/B0_M1_checkpoints.zip
-          retention-days: 2
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: report-preview
+          path: docs/report_preview/
+          if-no-files-found: ignore
+          retention-days: 7
   publish:
     needs: build
     runs-on: ubuntu-latest
@@ -125,13 +149,22 @@ jobs:
         with:
           name: validated-source
           path: ${{ runner.temp }}/validated
-      - name: Preserve history and publish only the validated tree
+      - uses: actions/download-artifact@v4
+        with:
+          name: B0-M1-checkpoints
+          path: ${{ runner.temp }}/assets
+      - uses: actions/download-artifact@v4
+        with:
+          name: experiment-evidence
+          path: ${{ runner.temp }}/assets
+      - name: Publish validated source without rewriting history
         env:
           EXPECTED_SHA: ${{ github.sha }}
           BUILD_RUN_ID: ${{ github.run_id }}
         run: |
           test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
           test "$(git ls-remote origin refs/heads/main | cut -f1)" = "e5fc77e09304739ee9d31bbce2143b09e7a74f98"
+          test "$(git ls-remote origin refs/heads/archive/main-before-v3-20260918 | cut -f1)" = "e5fc77e09304739ee9d31bbce2143b09e7a74f98"
           python - <<'PY'
           import json,os,pathlib,zipfile,subprocess
           root=pathlib.Path('.')
@@ -149,5 +182,11 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
-          git commit -m 'feat: unify B0 and M1 with rebuilt data, calibrated evaluators and controlled experiments'
+          git commit -m 'feat: publish unified B0 and M1 with rebuilt data, calibrated evaluators and controlled experiments'
           git push origin HEAD:release/v3-unified
+      - name: Keep trained generator checkpoints and evidence as permanent release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp "$RUNNER_TEMP/validated/case-validated.zip" "$RUNNER_TEMP/assets/Case-v3.0.0.zip"
+          gh release create v3.0.0 --target "$(git rev-parse HEAD)" --title 'Case 3.0.0 - B0 and M1' --notes-file CHANGELOG.md "$RUNNER_TEMP/assets/Case-v3.0.0.zip" "$RUNNER_TEMP/assets/B0_M1_checkpoints.zip" "$RUNNER_TEMP/assets/run-evidence.zip" docs/REPORT.pdf
