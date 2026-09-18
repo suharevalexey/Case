@@ -10,6 +10,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
         with:
@@ -67,8 +70,6 @@ jobs:
               for name in subprocess.check_output(['git','ls-files','-z']).decode().split('\0'):
                   if name and name not in names: pathlib.Path(name).unlink(missing_ok=True)
               z.extractall(root)
-          # The JSON manifest already verified all 20 raw files. The CSV view
-          # was missing one row; synchronize metadata, never change a raw hash.
           entries=json.loads(pathlib.Path('data/dataset_manifest.json').read_text())
           assert len(entries)==20
           for item in entries:
