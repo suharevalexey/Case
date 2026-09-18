@@ -41,8 +41,15 @@ jobs:
                   data=z.read(name)
                   assert hashlib.sha256(data).hexdigest()==digest
                   p.parent.mkdir(parents=True,exist_ok=True); p.write_bytes(data)
+          overrides={}
+          for source in (root/'.release/overrides').rglob('*'):
+              if not source.is_file(): continue
+              p=source.relative_to(root/'.release/overrides')
+              assert not p.is_absolute() and '..' not in p.parts and '.git' not in p.parts
+              data=source.read_bytes(); p.parent.mkdir(parents=True,exist_ok=True); p.write_bytes(data)
+              overrides[p.as_posix()]=hashlib.sha256(data).hexdigest()
           pathlib.Path('results').mkdir(exist_ok=True)
-          pathlib.Path('results/source_payload.json').write_text(json.dumps({'source_commit':manifest['base_commit'],'payload_sha256':ready['sha256'],'files':manifest['files']},indent=2))
+          pathlib.Path('results/source_payload.json').write_text(json.dumps({'source_commit':manifest['base_commit'],'payload_sha256':ready['sha256'],'files':manifest['files'],'overrides':overrides},indent=2))
           PY
       - name: Install the property environment
         run: python -m pip install -r requirements.txt
@@ -56,7 +63,7 @@ jobs:
         run: |
           python -m pytest -q --junitxml=results/test_results.xml | tee results/test_results.log
           python pipeline.py verify
-      - name: Package the verified source and experiment evidence
+      - name: Package the source and experiment evidence
         if: always()
         env:
           BUILD_RUN_ID: ${{ github.run_id }}
