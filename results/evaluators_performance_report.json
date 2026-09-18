@@ -17,7 +17,7 @@
     "RMSE": 0.3374392036949682,
     "mean_uncertainty": 0.29553003006829415
   },
-  "photochem_efficiency": {
+  "quantum_yield": {
     "type": "regression",
     "n_train": 4560,
     "n_test": 1140,

@@ -43,11 +43,11 @@ PROPERTIES = [
         "target_col": "log_extinction"
     },
     {
-        "name": "photochem_efficiency",
+        "name": "quantum_yield",
         "type": "regression",
         "group": "group_A",
         "description": "Photochemical energy storage quantum yield / PSS (0..1)",
-        "target_col": "photochem_efficiency"
+        "target_col": "quantum_yield"
     },
     {
         "name": "log_half_life",

@@ -72,7 +72,7 @@ def run():
     # Reorder columns
     cols = [
         "molecule_id", "canonical_smiles", "source_group", "source_dataset",
-        "absorption_max_nm", "log_extinction", "photochem_efficiency", "log_half_life",
+        "absorption_max_nm", "log_extinction", "quantum_yield", "log_half_life",
         "log_kp", "skin_sensitization", "skin_irritation"
     ]
     df_A = df_A[cols]
@@ -83,7 +83,7 @@ def run():
     print("STEP 3: Dataset Summary with 7 Properties")
     print("=" * 70)
     print(df_comb.groupby("source_group")[[
-        "absorption_max_nm", "log_extinction", "photochem_efficiency", "log_half_life",
+        "absorption_max_nm", "log_extinction", "quantum_yield", "log_half_life",
         "log_kp", "skin_sensitization", "skin_irritation"
     ]].count().T)
 

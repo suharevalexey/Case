@@ -1,4 +1,4 @@
-molecule_id,canonical_smiles,source_group,source_dataset,absorption_max_nm,log_extinction,photochem_efficiency,log_half_life,log_kp,skin_sensitization,skin_irritation
+molecule_id,canonical_smiles,source_group,source_dataset,absorption_max_nm,log_extinction,quantum_yield,log_half_life,log_kp,skin_sensitization,skin_irritation
 MOL_B_000001,Br,group_B,U07_ICE_Irritation,,,,,,,1.0
 MOL_B_000002,BrC=Cc1ccccc1,group_B,U07_ICE_Sensitization;U09_HPPT,,,,,,0.0,
 MOL_B_000003,BrCCCCCCBr,group_B,U07_ICE_Irritation,,,,,,,1.0

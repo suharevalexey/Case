@@ -38,9 +38,9 @@ MODELS_META = {
         "constraint_min": 3.80,
         "constraint_max": float("inf"),
     },
-    "group_A_photochem_efficiency": {
+    "group_A_quantum_yield": {
         "group": "A",
-        "target": "photochem_efficiency",
+        "target": "quantum_yield",
         "type": "regression",
         "unit": "quantum_yield",
         "constraint_min": 0.25,
@@ -129,11 +129,19 @@ class PropertyEvaluatorSuite:
             orc_path = os.path.join(oracle_dir, f"{key}_oracle.joblib")
             
             if not (os.path.exists(surr_path) and os.path.getsize(surr_path) > 0):
-                _ensure_file_from_github(surr_path, f"models/evaluators/{key}_evaluator.joblib")
+                legacy_surr = os.path.join(models_dir, f"{key.replace('quantum_yield', 'photochem_efficiency')}_evaluator.joblib")
+                if os.path.exists(legacy_surr) and os.path.getsize(legacy_surr) > 0:
+                    surr_path = legacy_surr
+                else:
+                    _ensure_file_from_github(surr_path, f"models/evaluators/{key}_evaluator.joblib")
             self.surrogates[key] = joblib.load(surr_path)
                 
             if not (os.path.exists(orc_path) and os.path.getsize(orc_path) > 0):
-                _ensure_file_from_github(orc_path, f"models/oracle/{key}_oracle.joblib")
+                legacy_orc = os.path.join(oracle_dir, f"{key.replace('quantum_yield', 'photochem_efficiency')}_oracle.joblib")
+                if os.path.exists(legacy_orc) and os.path.getsize(legacy_orc) > 0:
+                    orc_path = legacy_orc
+                else:
+                    _ensure_file_from_github(orc_path, f"models/oracle/{key}_oracle.joblib")
             self.oracles[key] = joblib.load(orc_path)
                 
         print(f"Successfully loaded {len(self.surrogates)} Group A/B surrogate models and {len(self.oracles)} oracle models.")
@@ -261,6 +269,12 @@ class PropertyEvaluatorSuite:
 
         # 7. Final overall constraint pass
         res_df["pass_constraints"] = ((res_df["pass_oracle_all"] == 1) & (res_df["synthetic_accessibility"] <= 5.0)).astype(int)
+
+        # Backwards-compatible aliases for legacy property names
+        if "pred_group_A_quantum_yield" in res_df.columns:
+            res_df["pred_group_A_photochem_efficiency"] = res_df["pred_group_A_quantum_yield"]
+            res_df["unc_group_A_photochem_efficiency"] = res_df["unc_group_A_quantum_yield"]
+            res_df["oracle_group_A_photochem_efficiency"] = res_df["oracle_group_A_quantum_yield"]
 
         return res_df
 

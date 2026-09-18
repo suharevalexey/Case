@@ -118,7 +118,7 @@ def run_integration():
             "source_dataset": "U10_huskinDB",
             "absorption_max_nm": np.nan,
             "log_extinction": np.nan,
-            "photochem_efficiency": np.nan,
+            "quantum_yield": np.nan,
             "log_kp": h_dict[smi],
             "skin_sensitization": np.nan,
             "skin_irritation": np.nan
@@ -145,7 +145,7 @@ def run_integration():
     print(f"Final Group B size: {len(df_B_final):,}")
     print(f"Final Combined size: {len(df_comb):,}")
     print("\nLabeled target properties counts:")
-    print(df_comb[["source_group", "absorption_max_nm", "log_extinction", "photochem_efficiency", "log_kp", "skin_sensitization", "skin_irritation"]].groupby("source_group").count())
+    print(df_comb[["source_group", "absorption_max_nm", "log_extinction", "quantum_yield", "log_kp", "skin_sensitization", "skin_irritation"]].groupby("source_group").count())
 
     # Save CSVs
     df_B_final.to_csv(FILE_B, index=False)
